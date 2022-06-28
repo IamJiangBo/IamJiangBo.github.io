@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/dog_128.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/dog_64.png">
+  <link rel="mask-icon" href="/images/logo.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="WSL2介绍WSL2：使用与linux的windows子系统。接触WSL2，源自于VMware对于系统的资源耗费甚多，由于在windows笔记本上需要经常用到linux，所以转战WSL2。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WSL2的安装教程">
+<meta property="og:url" content="http://example.com/2022/06/26/15-28-49/index.html">
+<meta property="og:site_name" content="那个少年和狗">
+<meta property="og:description" content="WSL2介绍WSL2：使用与linux的windows子系统。接触WSL2，源自于VMware对于系统的资源耗费甚多，由于在windows笔记本上需要经常用到linux，所以转战WSL2。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/06/26/15-28-49/image-20220626163149597.png">
+<meta property="og:image" content="http://example.com/2022/06/26/15-28-49/image-20220626163355670.png">
+<meta property="article:published_time" content="2022-06-26T07:28:49.000Z">
+<meta property="article:modified_time" content="2022-06-26T23:58:43.095Z">
+<meta property="article:author" content="Mr.Jiang">
+<meta property="article:tag" content="windows">
+<meta property="article:tag" content="ubuntu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/06/26/15-28-49/image-20220626163149597.png">
+
+<link rel="canonical" href="http://example.com/2022/06/26/15-28-49/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>WSL2的安装教程 | 那个少年和狗</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">那个少年和狗</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">给时光以生命，给岁月以文明</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">8</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">4</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/06/26/15-28-49/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar_new.gif">
+      <meta itemprop="name" content="Mr.Jiang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="那个少年和狗">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          WSL2的安装教程
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-06-26 15:28:49" itemprop="dateCreated datePublished" datetime="2022-06-26T15:28:49+08:00">2022-06-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-06-27 07:58:43" itemprop="dateModified" datetime="2022-06-27T07:58:43+08:00">2022-06-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">技术</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="WSL2介绍"><a href="#WSL2介绍" class="headerlink" title="WSL2介绍"></a>WSL2介绍</h2><p>WSL2：使用与linux的windows子系统。接触WSL2，源自于VMware对于系统的资源耗费甚多，由于在windows笔记本上需要经常用到linux，所以转战WSL2。</p>
+<span id="more"></span>
+<h3 id="安装教程"><a href="#安装教程" class="headerlink" title="安装教程"></a>安装教程</h3><ol>
+<li>建议按照windows官网给出的安装教程做。值得注意的是，我按照自动安装：wsl —install 并没有任何反应，最后通过手动安装才成功。<ul>
+<li>自动安装教程： <a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/windows/wsl/install">安装 WSL | Microsoft Docs</a></li>
+<li>手动安装教程：<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/windows/wsl/install-manual">旧版 WSL 的手动安装步骤 | Microsoft Docs</a></li>
+</ul>
+</li>
+<li>安装之前可能需要在原来的windows上开启一些选项，详细见：<a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_63969219/article/details/124632640?ops_request_misc=&amp;request_id=&amp;biz_id=102&amp;spm=1018.2226.3001.4187"> 适用于 Linux 的 Windows 10/11 子系统（WSL2）</a>；</li>
+<li>在安装之后ubuntu默认安装在C盘，这使得C盘本就捉襟见肘的我来说，需要寻找一种能够使WSL2挪到其他盘的方法，具体参见：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_43556844/article/details/120602402"> wsl2安装教程以及修改默认安装目录到其他盘</a>；这个博客只看最后<strong>wsl2改变系统位置</strong>即可；</li>
+</ol>
+<h3 id="使用教程"><a href="#使用教程" class="headerlink" title="使用教程"></a>使用教程</h3><ol>
+<li><p>在使用ubuntu系统时，难免会用到root用户，但是ubuntu默认情况下root用户的密码是随机的，我们需要设置root密码。具体参见：<a target="_blank" rel="noopener" href="https://blog.csdn.net/zhezhebie/article/details/105168386">wsl设置root密码</a>；</p>
+</li>
+<li><p>我们需要在新的wsl环境中安装很多工具，比如Miniconda 或者 Anaconda，但是下载极其缓慢。这个时候我们需要在本地下载好上传到wsl的ubuntu中。这里其实有两种做法：</p>
+<ul>
+<li><p>一种是直接将下载好的工具包在windows资源管理器中拷贝到wsl的文件系统中（因为wsl的linux的目录在windows资源管理器中可以看见）；</p>
+</li>
+<li><p>另一种是通过scp，这是一种比较常用的方法，这种方法通过ssh实现。首先，在wendows中安装ssh客户端：<a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_48692571/article/details/119840886?spm=1000.2123.3001.4430">windows 10安装ssh服务端和客户端并启用</a>；其次在linux中安装ssh服务端：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_38066812/article/details/119565997">ubuntu安装ssh服务器</a>。然后，再windows中使用ssh-keygen -t rsa 生成ssh的公钥和密钥（一般在当前用户下会生成一个.ssh我文件夹，其中后缀为.pub的为公钥），在linux中做同样操作（并手动在/home/xxxx（这里是我的用户名，用自己当前的linux用户名即可）/.ssh文件夹下创建文件：authorized_keys），将windows的.ssh文件夹中的id_rsa.pub的内容（建议使用Notepad++打开id_rsa.pub文件）拷贝到authorized_keys文件中。最后使用scp语法把本地文件传至linux。例如：scp C:\Pytorch常用函数手册.pdf username@ip:Documents/</p>
+<p>注意：无论是使用ssh username@ip登录linux还是使用scp 本地文件地址 username@ip:文件夹/文件夹/ 都要确保linux上的ssh服务处于开启状态。开启ssh服务用： sudo service ssh start</p>
+</li>
+</ul>
+</li>
+<li><p>如果需要在linux中使用GPU做计算，需要在liunx中安装cuda。而且在linux中安装cuda前在windows系统中更新一下nvidia的驱动。这里有一个坑就是不要用电脑自带的安全管家之类的更新nvidia驱动，我的就是遇到这个坑，我的本是拯救者，用自带的联想电脑管家始终检测到当前驱动是最新的驱动，但是官方的最新驱动比联想电脑管家检测到的高好几个版本。推荐下载nvidia他们家的：GeForce Experience工具检测更新nvidia驱动，下载地址：<a target="_blank" rel="noopener" href="https://www.nvidia.cn/geforce/geforce-experience/">GeForce Experience（简称 GFE）自动更新驱动并优化游戏设置 | NVIDIA</a>。然后，在linux的命令行中按照nvidia网站给出的方法安装cuda：<a target="_blank" rel="noopener" href="https://developer.nvidia.cn/cuda-downloads?target_os=Linux&amp;target_arch=x86_64&amp;Distribution=WSL-Ubuntu&amp;target_version=2.0&amp;target_type=deb_local">CUDA Toolkit 11.7 Downloads | NVIDIA Developer</a>。（值得注意的是nvidia给出的安装方法中的cuda版本始终是和他们的最新驱动对标的，这就是为什么要在安装cuda前，要将自己的nvidia驱动更新到最新）。安装完之后可以使用如下命令检测否安装成功：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvcc --version</span><br></pre></td></tr></table></figure>
+<img src="/2022/06/26/15-28-49/image-20220626163149597.png" class="" title="image-20220626163149597">
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvidia-smi</span><br></pre></td></tr></table></figure>
+<img src="/2022/06/26/15-28-49/image-20220626163355670.png" class="" title="image-20220626163355670">
+</li>
+<li><p>如果你希望能有一个开发工具（IDE），那也是可以的。比如安装pycharm社区版（因为专业版收费），直接在：<a target="_blank" rel="noopener" href="https://www.jetbrains.com/pycharm/download/#section=linux">Download PyCharm: Python IDE for Professional Developers by JetBrains</a> 下载即可（注意下载左边那个社区版的）。显然这是个后缀为tar.gz格式的文件，其中tar指打包文件，gz指压缩文件；所以这是一个打包的压缩文件，那怎么拆开它呢？举个例子吧(我要把一个名为pycharm-community-2022.1.3.tar.gz的文件解压到/home/xxx/software/目录下)：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf  pycharm-community-2022.1.3.tar.gz /home/xxx/software/</span><br></pre></td></tr></table></figure>
+<p>接下来是这个东西怎么用呢？你可以进入到解压的pycharm文件的bin目录下有一个pycharm.sh文件，你执行如下命令即可启动：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh pycharm.sh</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="远程连接"><a href="#远程连接" class="headerlink" title="远程连接"></a>远程连接</h3><p>有一种远程桌面的方法可以更方方便的使用我们的linux系统。推荐参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/Jasonkun_3/article/details/119135374">(161条消息) wsl2 远程桌面设置_Jasonkun_3的博客-CSDN博客_wsl2 远程桌面</a>。</p>
+<p>我还遇到过一个问题是在pycharm中无法输入中文，一开始是无法显示中文，准确的说一旦进入到pycharm中连输入法都不可以切换。最后找过很多帖子，达到了在linux中可以正常显示正文、正常输入中文以及在pycharm中可以正常显示中文，就是在pycharm中无法输入中文，最后我影响最深的是改过系统语言：<a target="_blank" rel="noopener" href="https://blog.csdn.net/yaxuan88521/article/details/123891305">在 Ubuntu 上通过命令行改变 Linux 系统语言</a>。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Mr.Jiang
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/2022/06/26/15-28-49/" title="WSL2的安装教程">http://example.com/2022/06/26/15-28-49/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/windows/" rel="tag"><i class="fa fa-tag"></i> windows</a>
+              <a href="/tags/ubuntu/" rel="tag"><i class="fa fa-tag"></i> ubuntu</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/06/25/15-40-30/" rel="prev" title="Hello World">
+      <i class="fa fa-chevron-left"></i> Hello World
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/06/26/19-40-51/" rel="next" title="向量表示世界1">
+      向量表示世界1 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#WSL2%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">WSL2介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B"><span class="nav-number">1.1.</span> <span class="nav-text">安装教程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B"><span class="nav-number">1.2.</span> <span class="nav-text">使用教程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5"><span class="nav-number">1.3.</span> <span class="nav-text">远程连接</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mr.Jiang"
+      src="/images/avatar_new.gif">
+  <p class="site-author-name" itemprop="name">Mr.Jiang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yourname" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:jiangbo_12321@163.com" title="E-Mail → mailto:jiangbo_12321@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/6103937582" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;6103937582" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.toutiao.com/c/user/token/MS4wLjABAAAAy0Ef875-YpeIxv5tkUmrNOnD86RBBJgDCJJGmBKfWJU/?source=author_home&log_from=b9ad0f0669988_1656370353254" title="TouTiao → https:&#x2F;&#x2F;www.toutiao.com&#x2F;c&#x2F;user&#x2F;token&#x2F;MS4wLjABAAAAy0Ef875-YpeIxv5tkUmrNOnD86RBBJgDCJJGmBKfWJU&#x2F;?source&#x3D;author_home&amp;log_from&#x3D;b9ad0f0669988_1656370353254" rel="noopener" target="_blank"><i class="fa fa-puzzle-piece fa-fw"></i>TouTiao</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mr.Jiang</span>
+</div>
+  <div class="powered-by"> <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank"></a><a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank"></a> 不曾与你分享的时间里，我在进步
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
